@@ -20,7 +20,18 @@ function roof.server.addons.load()
         description = "A chat filter for the server!",
         version = "1.0",
     })
-    
+    roof.server.addons.create("addons/adminsystem/adminsystem_loader.lua",{
+        name = "Admin System",
+        author = "Justice",
+        description = "A admin system for the server!",
+        version = "1.0",
+    })
+    roof.server.addons.create("addons/roofconfig/roofconfig_loader.lua",{
+        name = "Roof Config",
+        author = "Justice",
+        description = "Allows for ingame configuration of the server!",
+        version = "1.0",
+    })
 end
 
 roof.server.addons.load()

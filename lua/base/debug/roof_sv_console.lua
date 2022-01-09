@@ -34,3 +34,9 @@ concommand.Add("roof_debug_table", function(ply, cmd, args)
 
     MsgC(Color(255,0,0), "[ROOF CMD]", Color(255,255,255)," Server Debug Table has Printed Above! ^^\n")
 end)
+concommand.Add("roof_client_load", function(ply, cmd, args)
+    if !roof.server.player.auth(ply) then return end
+    
+
+    MsgC(Color(255,0,0), "[ROOF CMD]", Color(255,255,255)," Server Debug Table has Printed Above! ^^\n")
+end)

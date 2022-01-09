@@ -23,14 +23,17 @@ better than MOAT and other open source TTT bases out there currently!
 ROOF WILL NOW START ITS LOADING PROCESS!
    ]]
    MsgC(Color(255,0,0), msg1, Color(255,255,255), msg2, "\n")
+
+   AddCSLuaFile("base/net/roof_cl_net.lua")
+
+   include("base/net/roof_sv_net.lua")
    include("base/config/roof_main_config.lua")
    include("base/addons/roof_addon_tools.lua") 
    include("base/config/roof_addon_config.lua")
    include("base/player/roof_sv_player_auth.lua")
-
    include("base/debug/roof_sv_console.lua")
 end
 
 if CLIENT then
-    
+   include("base/net/roof_cl_net.lua")
 end
