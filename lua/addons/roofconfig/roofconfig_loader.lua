@@ -13,7 +13,9 @@ local function load()
         hook.Add("PlayerButtonDown", "RoofConfigSpawn",function(ply)
             ply.RoofConfigClientLoaded = ply.RoofConfigClientLoaded or false
             if !ply.RoofConfigClientLoaded then
-                roof.server.net.loadClientFiles({
+                ply.RoofConfigClientLoaded = true
+                MsgC(Color(255,0,0), "[ROOF]", Color(255,255,255), " Loading client files...\n")
+                roof.server.net.loadClientFiles(ply, {
                     [1] = "addons/roofconfig/client/roofconfig_cl_net.lua",
                     [2] = "addons/roofconfig/client/roofconfig_ui_menu.lua"
                 })
