@@ -9,7 +9,7 @@ _______  ____   _____/ ____\
  |  | \(  <_> |  <_> )  |   
  |__|   \____/ \____/|__|   
 
--     Version 1.0    -
+-     Version 1.1    -
 - Created By Justice -
 
 ]]
@@ -32,6 +32,7 @@ ROOF WILL NOW START ITS LOADING PROCESS!
    include("base/config/roof_addon_config.lua")
    include("base/player/roof_sv_player_auth.lua")
    include("base/debug/roof_sv_console.lua")
+   include("base/debug/roof_sv_errors.lua")
 end
 
 if CLIENT then

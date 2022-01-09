@@ -19,6 +19,7 @@ function roof.server.addons.create(string,tbl)
     -- Add addon to table
     tbl.disable = disable
     tbl.enable = load
+    tbl.enabled = true
     roof.server.data.addons[tbl.name] = tbl
 end
 

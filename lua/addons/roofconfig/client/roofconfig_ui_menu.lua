@@ -2,6 +2,8 @@ roofconfig = roofconfig or {}
 roofconfig.client = roofconfig.client or {}
 roofconfig.client.menus = roofconfig.client.menus or {}
 roofconfig.client.menus.main = roofconfig.client.menus.main or {}
+roofconfig.client.data = roofconfig.client.data or {}
+roofconfig.client.data.addons = roofconfig.client.data.addons or {}
 
 function roofconfig.client.menus.main.open()
     local tabs = {}
@@ -153,6 +155,84 @@ function roofconfig.client.menus.main.open()
             PrintTable(data)
         end
     })
+    CreateTab("Addons", {
+        icon = "icon16/world.png",
+        change = function()
+            local d = {}
+            addons = panel:Add("DPanel")
+            addons:SetPos(452.5, 75)
+            addons:SetSize(1455, 985)
+            addons:TDLib()
+            addons:ClearPaint()
+                :Background(Color(59, 59, 59), 0)
+                :Text("Addon Settings", "DermaLarge", Color(255, 255, 255), TEXT_ALIGN_LEFT, 650, -450)
+            table.insert(d, #d, addons)
+
+            scroll = addons:Add("DScrollPanel")
+            scroll:SetPos(20, 75)
+            scroll:SetSize(350,850)
+            scroll:TDLib()
+            scroll:ClearPaint()
+                :Background(Color(40,41,40), 6)
+
+            infop = addons:Add("DPanel")
+            infop:SetPos(380, 75)
+            infop:SetSize(1050, 850)
+            infop:TDLib()
+            infop:ClearPaint()
+                :Background(Color(40,41,40), 6)
+
+
+            for k,v in pairs(roofconfig.client.data.addons) do
+                if k == "Roof Config" then continue end
+                name = scroll:Add("DButton")
+                name:SetText(k)
+                name:SetTextColor(Color(255,255,255))
+                name:Dock(TOP)
+                name:DockMargin(10,10,10,5)
+                name:SetTall(50)
+                name:TDLib()
+                name:ClearPaint()
+                    :Background(Color(59, 59, 59), 5)
+                    :BarHover(Color(255, 255, 255), 3)
+                    :CircleClick()
+                name.DoRightClick = function()
+
+                    local f = vgui.Create( "DFrame" )
+                    f:SetSize( 500, 300 )
+                    f:Center()
+                    f:MakePopup()
+                    f:SetTitle("Roof Config - " .. k)
+                    f:TDLib()
+                    f:ClearPaint()
+                        :Background(Color(133, 133, 133, 58), 6)
+
+                    local popup = f:Add("DProperties")
+                    popup:Dock(FILL)
+
+                    local choice = popup:CreateRow( "Addon Settings", "Enabled" )
+                    choice:SetPos(name:GetPos())
+                    choice:Setup( "Combo", {} )
+                    choice:AddChoice( "True", true )
+                    choice:AddChoice( "False", false )
+                    choice:SetValue(v.enabled)
+
+                    choice.DataChanged = function(self, val)
+                        net.Start("RoofConfig:Net:UpdateAddon")
+                        net.WriteString(k)
+                        net.WriteBool(val)
+                        net.SendToServer()
+                    end
+
+                end 
+            end
+
+            for k,v in pairs(d) do
+                table.insert(data, #data, v)
+            end
+            PrintTable(data)
+        end
+    })
     CreateTab("Debug", {
         icon = "icon16/bug.png",
         change = function()
@@ -190,18 +270,25 @@ function roofconfig.client.menus.main.open()
             scroll:SetSize(350,850)
             scroll:TDLib()
             scroll:ClearPaint()
-                :Background(Color(40,41,40), 0)
+                :Background(Color(40,41,40), 6)
             for k,v in pairs(player.GetAll()) do
+                name = scroll:Add("DLabel")
+                name:SetText(" Player: " .. v:Nick())
+                name:SetTextColor(Color(255,255,255))
+                name:Dock(TOP)
+                name:SetTall(25)
+
                 local av = scroll:Add("DPanel")
-                av:SetTall(100)
+                av:SetTall(75)
                 av:Dock(TOP)
-                av:DockMargin(0,0,5,5)
+                av:DockMargin(10,5,10,5)
                 av:TDLib()
                 av:ClearPaint()
                     :CircleAvatar()
                     :SetPlayer(v, 184)
-                    --:Text("n", "DermaLarge", Color(255, 255, 255), TEXT_ALIGN_LEFT, 5,5)
-                print(v:Nick())
+                    --:Text("n", "DermaLarge", Color(255, 255, 255), TEXT_ALIGN_LEFT, 5,5
+                
+                    print(v:Nick())
             end
 
             
