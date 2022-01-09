@@ -7,6 +7,3 @@ roofconfig.client.net = roofconfig.client.net or {}
 net.Receive("RoofConfig:Net:Menus:Main", function(len, ply)
     roofconfig.client.menus.main.open()
 end)
-net.Receive("RoofConfig:Net:ClientSync", function(len, ply)
-
-end)
