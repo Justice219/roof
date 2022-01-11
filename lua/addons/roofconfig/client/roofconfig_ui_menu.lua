@@ -63,7 +63,6 @@ function roofconfig.client.menus.main.open()
         antialias = true,
         shadow = false
     })
-
     local function ChangeTab(name)
         print("Changing Tab")
         for k,v in pairs(data) do
@@ -182,6 +181,36 @@ function roofconfig.client.menus.main.open()
             infop:ClearPaint()
                 :Background(Color(40,41,40), 6)
 
+            name1 = infop:Add("DLabel")
+            name1:SetPos(20, 0)
+            name1:SetSize(500, 200)
+            name1:SetText("Name: ")
+            name1:SetFont("DermaLarge")
+            name1:SetTextColor(Color(255, 255, 255))
+
+            author = infop:Add("DLabel")
+            author:SetPos(20, 50)
+            author:SetSize(200, 200)
+            author:SetText("Author: ")
+            author:SetFont("DermaLarge")
+            author:SetTextColor(Color(255, 255, 255))
+
+            desc = infop:Add("RichText")
+            desc:SetPos(20, 200)
+            desc:SetSize(500, 200)
+            desc:InsertColorChange(255,255,255,255)
+            desc:AppendText("Description: ")
+            desc:TDLib()
+            desc:ClearPaint()
+                :Background(Color(59, 59, 59), 6)
+
+            enabled = infop:Add("DLabel")
+            enabled:SetPos(20,350)
+            enabled:SetSize(200, 200)
+            enabled:SetText("Enabled: ")
+            enabled:SetFont("DermaLarge")
+            enabled:SetTextColor(Color(255, 255, 255))
+
 
             for k,v in pairs(roofconfig.client.data.addons) do
                 if k == "Roof Config" then continue end
@@ -196,7 +225,17 @@ function roofconfig.client.menus.main.open()
                     :Background(Color(59, 59, 59), 5)
                     :BarHover(Color(255, 255, 255), 3)
                     :CircleClick()
+                name.DoClick = function()
+                    name1:SetText("Name: "..k)
+                    author:SetText("Author: ".. v.author)
+                    desc:SetText("Description: "..v.description)
+                    enabled:SetText("Enabled: "..tostring(v.enabled))
+                end
                 name.DoRightClick = function()
+                    name1:SetText("Name: "..k)
+                    author:SetText("Author: ".. v.author)
+                    desc:SetText("Description: "..v.description)
+                    enabled:SetText("Enabled: "..tostring(v.enabled))
 
                     local f = vgui.Create( "DFrame" )
                     f:SetSize( 500, 300 )
@@ -222,9 +261,17 @@ function roofconfig.client.menus.main.open()
                         net.WriteString(k)
                         net.WriteBool(val)
                         net.SendToServer()
+
+                        roofconfig.client.menus.popup(panel, "Addon Settings", "Updated", "The addon has been updated!", "Ok")
                     end
 
                 end 
+
+                addon = table.Random(roofconfig.client.data.addons)
+                name1:SetText("Name: "..addon.name)
+                author:SetText("Author: ".. addon.author)
+                desc:SetText("Description: "..addon.description)
+                enabled:SetText("Enabled: "..tostring(addon.enabled))
             end
 
             for k,v in pairs(d) do

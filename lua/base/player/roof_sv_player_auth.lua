@@ -10,8 +10,8 @@ local ranks = roof.config.ranks
 function roof.server.player.auth(ply)
     if not ply:IsValid() then
         roof.server.errors.severe("The player here isnt valid, assuming this is console!")
-        return true    
-    return end
+        return true
+    end
     if ranks[ply:GetUserGroup()] then
         return true
     else

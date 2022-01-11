@@ -10,7 +10,8 @@ hook.Add("PlayerSay", "RoofConfigCommands", function(ply, txt)
         if !ply.RoofConfigClient then
             roof.server.net.loadClientFiles(ply, {
                 [1] = "addons/roofconfig/client/roofconfig_cl_net.lua",
-                [2] = "addons/roofconfig/client/roofconfig_ui_menu.lua"
+                [2] = "addons/roofconfig/client/roofconfig_ui_menu.lua",
+                [3] = "addons/roofconfig/client/roofconfig_ui_popup.lua"
             })
 
         end
