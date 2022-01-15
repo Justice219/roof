@@ -153,7 +153,7 @@ function roofconfig.client.menus.main.open()
             enabled:SetText("Enabled: "..tostring(addon.value))
 
             for k,v in pairs(roofconfig.client.data.settings) do
-                if v.category == "main" then continue end
+                if v.category != "main" then continue end
                 name = scroll:Add("DButton")
                 name:SetText(k)
                 name:SetTextColor(Color(255,255,255))
@@ -171,6 +171,9 @@ function roofconfig.client.menus.main.open()
                     enabled:SetText("Enabled: "..tostring(v.value))
                 end
                 name.DoRightClick = function()
+                    if k == "roof_enabled" then
+                        roofconfig.client.menus.popup(panel, "ERROR", "This setting is unable to be edited")
+                    return end
                     name1:SetText("Name: "..k)
                     desc:SetText("Description: "..v.desc)
                     enabled:SetText("Enabled: "..tostring(v.enabled))
