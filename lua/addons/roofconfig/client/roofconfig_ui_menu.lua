@@ -9,6 +9,13 @@ function roofconfig.client.menus.main.open()
     local tabs = {}
     local data = {}
 
+    surface.CreateFont("roofconfig_title", {
+        font = "Roboto",
+        size = 20,
+        weight = 500,
+        antialias = true
+    })
+
     local panel = vgui.Create("DPanel")
     panel:TDLib()
     panel:SetSize(1920, 1080)
@@ -147,10 +154,128 @@ function roofconfig.client.menus.main.open()
             enabled:SetFont("DermaLarge")
             enabled:SetTextColor(Color(255, 255, 255))
 
+            warn = infop:Add("DLabel")
+            warn:SetPos(20,725)
+            warn:SetSize(1000, 200)
+            warn:SetText("")
+            warn:SetFont("roofconfig_title")
+            warn:SetTextColor(Color(255, 255, 255))
+
+            local n = nil
+            del = infop:Add("DButton")
+            del:SetText("Remove")
+            del:SetTextColor(Color(255,255,255))
+            del:SetPos(20, 375)
+            del:SetSize(150, 30)
+            del:TDLib()
+            del:ClearPaint()
+                :Background(Color(59, 59, 59), 5)
+                :BarHover(Color(255, 255, 255), 3)
+                :CircleClick()
+            del.DoClick = function()
+                if n == nil then return end
+                panel:Remove()
+                net.Start("RoofConfig:Net:RemoveSetting")
+                net.WriteString(n)
+                net.SendToServer()
+            end
+
+            create = infop:Add("DButton")
+            create:SetText("Create Setting")
+            create:SetTextColor(Color(255,255,255))
+            create:SetPos(200, 375)
+            create:SetSize(150, 30)
+            create:TDLib()
+            create:ClearPaint()
+                :Background(Color(59, 59, 59), 5)
+                :BarHover(Color(255, 255, 255), 3)
+                :CircleClick()
+            create.DoClick = function()
+                if n == nil then return end
+                
+                local pop = vgui.Create("DFrame")
+                pop:SetSize(500, 200)
+                pop:Center()
+                pop:SetTitle("Create A New Setting")
+                pop:MakePopup()
+                pop:TDLib()
+                pop:ClearPaint()
+                    :Background(Color(40,41,40), 6)
+                    :CircleHover(Color(59, 59, 59), 5, 20)
+
+                local name = pop:Add("DTextEntry")
+                name:SetPos(20, 25)
+                name:SetSize(450, 25)
+                name:SetText("Var Name (Ex roof_enabled)")
+                name:SetFont("roofconfig_title")
+                name.Paint = function(self, w, h)
+                    draw.RoundedBox( 6, 0, 0, w, h, Color(59,59,59))
+                    self:DrawTextEntryText(Color(255, 255, 255), Color(255, 0, 0), Color(255, 255, 255))
+                end
+
+                local desc = pop:Add("DTextEntry")
+                desc:SetPos(20, 55)
+                desc:SetSize(450, 25)
+                desc:SetText("Description (Ex: this enables/disables roof)")
+                desc:SetFont("roofconfig_title")
+                desc.Paint = function(self, w, h)
+                    draw.RoundedBox( 6, 0, 0, w, h, Color(59,59,59))
+                    self:DrawTextEntryText(Color(255, 255, 255), Color(255, 0, 0), Color(255, 255, 255))
+                end
+
+                local category = pop:Add("DTextEntry")
+                category:SetPos(20, 85)
+                category:SetSize(450, 25)
+                category:SetText("Menu Category (Ex: main)")
+                category:SetFont("roofconfig_title")
+                category.Paint = function(self, w, h)
+                    draw.RoundedBox( 6, 0, 0, w, h, Color(59,59,59))
+                    self:DrawTextEntryText(Color(255, 255, 255), Color(255, 0, 0), Color(255, 255, 255))
+                end
+
+                local bool = pop:Add("DCheckBox")
+                bool:SetPos(20, 115)
+                bool:SetSize(25, 25)
+
+                create1 = pop:Add("DButton")
+                create1:SetText("Finish")
+                create1:SetTextColor(Color(255,255,255))
+                create1:SetPos(175,140)
+                create1:SetSize(150, 30)
+                create1:TDLib()
+                create1:ClearPaint()
+                    :Background(Color(59, 59, 59), 5)
+                    :BarHover(Color(255, 255, 255), 3)
+                    :CircleClick()
+                create1.DoClick = function()
+                    local n = name:GetValue()
+                    local d = desc:GetValue()
+                    local c = category:GetValue()
+                    local b = bool:GetChecked()
+                    print("BOOLEAN")
+                    print(b)
+                    if n == "" or d == "" or c == "" then return end
+                    net.Start("RoofConfig:Net:CreateSetting")
+                    net.WriteString(n)
+                    net.WriteString(d)
+                    net.WriteString(c)
+                    net.WriteBool(b)
+                    net.SendToServer()
+                    panel:Remove()
+                    pop:Remove()
+                end
+            end
+
             addon = table.Random(roofconfig.client.data.settings)
             name1:SetText("Name: "..addon.var)
             desc:SetText("Description: "..addon.desc)
             enabled:SetText("Enabled: "..tostring(addon.value))
+            n = addon.var
+            if addon.method == "create" then
+                warn:SetText("Warning, deleting this addon wont permanently remove it from the server! It was created through the config file!")
+            else
+                warn:SetText("")
+            end
 
             for k,v in pairs(roofconfig.client.data.settings) do
                 if v.category != "main" then continue end
@@ -169,6 +294,12 @@ function roofconfig.client.menus.main.open()
                     name1:SetText("Name: "..k)
                     desc:SetText("Description: "..v.desc)
                     enabled:SetText("Enabled: "..tostring(v.value))
+                    n = addon.var
+                    if v.method == "create" then
+                        warn:SetText("Warning, deleting this addon wont permanently remove it from the server! It was created through the config file!")
+                    else
+                        warn:SetText("")
+                    end
                 end
                 name.DoRightClick = function()
                     if k == "roof_enabled" then
@@ -177,6 +308,7 @@ function roofconfig.client.menus.main.open()
                     name1:SetText("Name: "..k)
                     desc:SetText("Description: "..v.desc)
                     enabled:SetText("Enabled: "..tostring(v.enabled))
+                    n = k
 
                     local f = vgui.Create( "DFrame" )
                     f:SetSize( 500, 300 )

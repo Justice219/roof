@@ -34,6 +34,11 @@ function roof.server.settings.load()
         desc = "Enable/Disable the roof base",
         category = "main" -- main, player, debug, world
     })
+    roof.server.settings.create("roof_debug", {
+        default = true,
+        desc = "Enable/Disable debugging for the roof base",
+        category = "main" -- main, player, debug, world
+    })
 
     -- PLEASE ADD ANY NEW NON-INTERNAL SETTINGS UNDER THIS LINE!
 
