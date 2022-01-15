@@ -36,7 +36,6 @@ function roof.server.settings.createInternal(name, tbl)
 
     local val = roof.server.db.loadAll("roof_settings", "settings_tbl")
     if val then
-        print("1")
         val = util.JSONToTable(val)
         if val[name] then
             roof.server.errors.severe("Setting '" .. name .. "' already exists. This should not happen, but is not fatal.")
@@ -49,9 +48,9 @@ function roof.server.settings.createInternal(name, tbl)
             category = tbl.category,
         }
 
+        roof.server.settings.create(val[name].var, val[name])
         val = util.TableToJSON(val)
         roof.server.db.updateAll("roof_settings", "settings_tbl", val)
-        roof.server.settings.create(val[name].var, val[name])
     else
         local tbl = {}
         tbl[name] = {
@@ -60,9 +59,9 @@ function roof.server.settings.createInternal(name, tbl)
             value = tbl.default,
             category = tbl.category,
         }
+        roof.server.settings.create(tbl[name].var, tbl[name])
         val = util.TableToJSON(tbl)
         roof.server.db.updateAll("roof_settings", "settings_tbl", val)
-        roof.server.settings.create(tbl[name].var, tbl[name])
     end
     roof.server.errors.change("Setting '" .. name .. "' created INTERNALLY!")
 end
@@ -79,6 +78,28 @@ function roof.server.settings.loadInternal()
                 category = v.category,
             }
             roof.server.settings.create(v.var, tbl)
+        end
+    end
+end
+
+function roof.server.db.removeInternal(setting)
+    local data = roof.server.db.loadAll("roof_settings", "settings_tbl")
+    if !data then 
+        roof.server.errors.severe("Somehow this function was called even though there are no settings in the DB. Whatever the fuck your doing calm down!") 
+    return end
+
+    tbl = util.JSONToTable(data)
+    for k,v in pairs(tbl) do
+        if v.var == setting then
+           print("match found")
+           tbl[k] = nil
+           if table.maxn == 0 then
+                roof.server.db.updateAll("roof_settings", "settings_tbl", NULL)
+           else
+                roof.server.db.updateAll("roof_settings", "settings_tbl", util.TableToJSON(tbl))
+                roof.server.errors.change("Removed setting: " .. setting) 
+                roof.server.settings.remove(setting)
+            end      
         end
     end
 end

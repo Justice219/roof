@@ -11,15 +11,9 @@ hook.Add("PlayerSay", "RoofConfigCommands", function(ply, txt)
             roof.server.net.loadClientFiles(ply, {
                 [1] = "addons/roofconfig/client/roofconfig_cl_net.lua",
                 [2] = "addons/roofconfig/client/roofconfig_ui_menu.lua",
-                [3] = "addons/roofconfig/client/roofconfig_ui_popup.lua"
+                [3] = "addons/roofconfig/client/roofconfig_ui_popup.lua",
             })
-
         end
-
-        net.Start("RoofConfig:Net:Menus:Main")
-        net.Send(ply)
-        print(" all ran")
-
 
         local tbl = {}
         for k,v in pairs(roof.server.data.addons) do
@@ -33,6 +27,11 @@ hook.Add("PlayerSay", "RoofConfigCommands", function(ply, txt)
         end
         net.Start("RoofConfig:Net:SyncClient")
         net.WriteTable(tbl)
+        net.WriteTable(roof.server.data.settings)
+        net.Send(ply)
+        print(" all ran")
+    
+        net.Start("RoofConfig:Net:Menus:Main")
         net.Send(ply)
         print(" all ran")
     end

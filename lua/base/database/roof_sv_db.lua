@@ -49,22 +49,6 @@ function roof.server.db.updateAll(name, row, value)
     else
         sql.Query("INSERT INTO " .. name .. " ( "..row.." ) VALUES( "..value.." )") 
     end
-    print(sql.LastError())
-end
-
-function roof.server.db.removeSetting(name, setting)
-    local data = roof.server.db.loadAll(name, "settings_tbl")
-    if !data then 
-        roof.server.errors.severe("Somehow this function was called even though there are no settings in the DB. Whatever the fuck your doing calm down!") 
-    return end
-
-    tbl = util.JSONToTable(data)
-    for k,v in pairs(tbl) do
-        if v.var == setting then
-           tbl[k] = nil      
-           roof.server.errors.change("Removed setting: " .. setting)      
-        end
-    end
 end
 
 function roof.server.db.load(name, method)

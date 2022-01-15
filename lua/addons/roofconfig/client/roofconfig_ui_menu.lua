@@ -110,6 +110,101 @@ function roofconfig.client.menus.main.open()
                 :Text("Main Settings", "DermaLarge", Color(255, 255, 255), TEXT_ALIGN_LEFT, 650, -450)
             table.insert(d, #d, main)
 
+            scroll = main:Add("DScrollPanel")
+            scroll:SetPos(20, 75)
+            scroll:SetSize(350,850)
+            scroll:TDLib()
+            scroll:ClearPaint()
+                :Background(Color(40,41,40), 6)
+        
+            infop = main:Add("DPanel")
+            infop:SetPos(380, 75)
+            infop:SetSize(1050, 850)
+            infop:TDLib()
+            infop:ClearPaint()
+                :Background(Color(40,41,40), 6)
+
+            name1 = infop:Add("DLabel")
+            name1:SetPos(20, 0)
+            name1:SetSize(500, 200)
+            name1:SetText("Name: ")
+            name1:SetFont("DermaLarge")
+            name1:SetTextColor(Color(255, 255, 255))
+
+            desc = infop:Add("RichText")
+            desc:SetPos(20, 125)
+            desc:SetSize(500, 200)
+            desc:InsertColorChange(255,255,255,255)
+            desc:AppendText("Description: ")
+            desc:TDLib()
+            desc:ClearPaint()
+                :Background(Color(59, 59, 59), 6)
+
+            enabled = infop:Add("DLabel")
+            enabled:SetPos(20,250)
+            enabled:SetSize(200, 200)
+            enabled:SetText("Enabled: ")
+            enabled:SetFont("DermaLarge")
+            enabled:SetTextColor(Color(255, 255, 255))
+
+            addon = table.Random(roofconfig.client.data.settings)
+            name1:SetText("Name: "..addon.var)
+            desc:SetText("Description: "..addon.desc)
+            enabled:SetText("Enabled: "..tostring(addon.value))
+
+            for k,v in pairs(roofconfig.client.data.settings) do
+                if v.category == "main" then continue end
+                name = scroll:Add("DButton")
+                name:SetText(k)
+                name:SetTextColor(Color(255,255,255))
+                name:Dock(TOP)
+                name:DockMargin(10,10,10,5)
+                name:SetTall(50)
+                name:TDLib()
+                name:ClearPaint()
+                    :Background(Color(59, 59, 59), 5)
+                    :BarHover(Color(255, 255, 255), 3)
+                    :CircleClick()
+                name.DoClick = function()
+                    name1:SetText("Name: "..k)
+                    desc:SetText("Description: "..v.desc)
+                    enabled:SetText("Enabled: "..tostring(v.value))
+                end
+                name.DoRightClick = function()
+                    name1:SetText("Name: "..k)
+                    desc:SetText("Description: "..v.desc)
+                    enabled:SetText("Enabled: "..tostring(v.enabled))
+
+                    local f = vgui.Create( "DFrame" )
+                    f:SetSize( 500, 300 )
+                    f:Center()
+                    f:MakePopup()
+                    f:SetTitle("Roof Config - " .. k)
+                    f:TDLib()
+                    f:ClearPaint()
+                        :Background(Color(133, 133, 133, 58), 6)
+
+                    local popup = f:Add("DProperties")
+                    popup:Dock(FILL)
+
+                    local choice = popup:CreateRow( "Addon Settings", "Enabled" )
+                    choice:SetPos(name:GetPos())
+                    choice:Setup( "Combo", {} )
+                    choice:AddChoice( "True", true )
+                    choice:AddChoice( "False", false )
+                    choice:SetValue(v.value)
+
+                    choice.DataChanged = function(self, val)
+                        net.Start("RoofConfig:Net:UpdateSetting")
+                        net.WriteString(k)
+                        net.WriteBool(val)
+                        net.SendToServer()
+                        roofconfig.client.menus.popup(panel, "Main Settings", "The setting has been updated!")
+                    end
+                end
+            end
+
+
             for k,v in pairs(d) do
                 table.insert(data, #data, v)
             end

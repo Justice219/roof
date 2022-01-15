@@ -7,10 +7,10 @@ roofconfig.client.data = roofconfig.client.data or {}
 
 net.Receive("RoofConfig:Net:Menus:Main", function(len, ply)
     roofconfig.client.menus.main.open()
-    PrintTable(roofconfig)
 end)
 net.Receive("RoofConfig:Net:SyncClient", function(len, ply)
     local addonData = net.ReadTable()
+    local settingData = net.ReadTable()
     roofconfig.client.data.addons = addonData
-    PrintTable(roofconfig)
+    roofconfig.client.data.settings = settingData
 end)

@@ -60,6 +60,12 @@ concommand.Add("roof_settings_create_internal", function(ply, cmd, args)
         category = "test",
     })
 end)
+concommand.Add("roof_settings_remove_internal", function(ply, cmd, args)
+    if !roof.server.player.auth(ply) then return end
+
+    roof.server.db.removeInternal(args[1])
+end)
+
 concommand.Add("roof_settings_print", function(ply, cmd, args)
     if !roof.server.player.auth(ply) then return end
 

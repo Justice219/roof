@@ -10,6 +10,7 @@ util.AddNetworkString("RoofConfig:Net:Menus:Main")
 util.AddNetworkString("RoofConfig:Net:SyncClient")
 util.AddNetworkString("RoofConfig:Net:UpdateSettings")
 util.AddNetworkString("RoofConfig:Net:UpdateAddon")
+util.AddNetworkString("RoofConfig:Net:UpdateSetting")
 
 net.Receive("RoofConfig:Net:UpdateAddon", function(len, ply)
     if !roof.server.player.auth(ply) then return end
@@ -39,4 +40,31 @@ net.Receive("RoofConfig:Net:UpdateAddon", function(len, ply)
 
     ply:JLIBSendNotification("ROOF CONFIG SYSTEM", "Addon '"..addon.name.."' has been "..(val and "enabled" or "disabled").."!", "success!")
 
+end)
+
+net.Receive("RoofConfig:Net:UpdateSetting", function(len, ply)
+    if !roof.server.player.auth(ply) then return end
+    setting = roof.server.data.settings[net.ReadString()]
+    val = net.ReadBool()
+
+    if !setting then
+        roof.server.errors.severe("Internal Error Occured in (RoofConfig:Net:UpdateSetting), This shouldnt happen!\n")
+        roof.server.errors.severe("Details: ", setting, val, "\n")
+        roof.server.errors.severe("[ROOF]", "Please Contact Justice#4956 If this happens again!\n")
+    return end
+    
+    if val then
+        if setting.value then
+            roof.server.errors.normal("Setting '"..setting.var.."' is already enabled!\n")
+        return end
+        setting.value = true
+        roof.server.errors.change("Enabled Setting: " .. setting.var .. "\n")
+    else
+        if !setting.value then
+            roof.server.errors.normal("Setting '"..setting.var.."' is already disabled!\n")
+        return end
+        setting.value = false
+        roof.server.errors.change("Disabled Setting: " .. setting.var .. "\n")
+    end
+    
 end)
