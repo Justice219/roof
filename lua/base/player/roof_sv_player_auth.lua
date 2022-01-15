@@ -8,7 +8,7 @@ MsgC(Color(255,0,0), "[ROOF]", Color(255,255,255), " Loading player authenticati
 local ranks = roof.config.ranks
 
 function roof.server.player.auth(ply)
-    if not ply:IsValid() then
+    if not IsValid(ply) then
         roof.server.errors.severe("The player here isnt valid, assuming this is console!")
         return true
     end

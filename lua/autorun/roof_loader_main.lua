@@ -33,6 +33,9 @@ ROOF WILL NOW START ITS LOADING PROCESS!
    include("base/player/roof_sv_player_auth.lua")
    include("base/debug/roof_sv_console.lua")
    include("base/debug/roof_sv_errors.lua")
+   include("base/database/roof_sv_db.lua")
+   include("base/settings/roof_sv_settings.lua")
+   include("base/config/roof_setting_config.lua")
 end
 
 if CLIENT then
