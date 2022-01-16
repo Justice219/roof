@@ -19,7 +19,7 @@ hook.Add("PlayerSay", "AdminSystemChat", function(ply, text)
 
         local plys = {}
         for k,v in pairs(player.GetAll()) do
-            local g = adminsystem.server.player.findGroup(v)
+            local g = adminsystem.server.player.findGroup(v, )
             if not g then
                 plys[v:SteamID64()] = {
                     name = v:Nick(),

@@ -118,6 +118,21 @@ function adminsystem.server.groups.find(name)
     end
 end
 
+function adminsystem.server.groups.addPerm(name, perm)
+    if not adminsystem.server.data.groups[name] then
+        roof.server.errors.severe("The group  "..name.." does not exist! please choose another name!")
+    return end
+
+    local val = roof.server.db.loadAll("adminsystem_groups", "groups_tbl")
+    if val then
+        tbl = util.JSONToTable(val)
+        tbl[name].permissions[perm] = true
+        roof.server.db.updateAll("adminsystem_groups", "groups_tbl", util.TableToJSON(tbl))
+        adminsystem.server.data.groups[name] = tbl[name]
+        roof.server.errors.change("The permission "..perm.." has been added to the group "..name.."!")
+    end
+end
+
 function adminsystem.server.groups.clear()
     adminsystem.server.data.groups = {}
 end
