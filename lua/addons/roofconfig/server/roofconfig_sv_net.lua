@@ -74,6 +74,7 @@ end)
 net.Receive("RoofConfig:Net:RemoveSetting", function(len, ply)
     if !roof.server.player.auth(ply) then return end
     setting = roof.server.data.settings[net.ReadString()]
+    print("ran")
 
     if !setting then
         roof.server.errors.severe("Internal Error Occured in (RoofConfig:Net:RemoveSetting), This shouldnt happen!\n")

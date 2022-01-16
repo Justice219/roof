@@ -57,7 +57,7 @@ function roof.server.settings.createInternal(name, tbl)
             method = "internal",
         }
 
-        roof.server.settings.create(val[name].var, val[name], ovr)
+        roof.server.settings.create(val[name].var, val[name], true)
         val = util.TableToJSON(val)
         roof.server.db.updateAll("roof_settings", "settings_tbl", val)
     else
@@ -69,7 +69,7 @@ function roof.server.settings.createInternal(name, tbl)
             category = tbl.category,
             method = "internal",
         }
-        roof.server.settings.create(tbl[name].var, tbl[name], ovr)
+        roof.server.settings.create(tbl[name].var, tbl[name], true)
         val = util.TableToJSON(tbl)
         roof.server.db.updateAll("roof_settings", "settings_tbl", val)
     end
@@ -83,7 +83,7 @@ function roof.server.settings.loadInternal()
         val = util.JSONToTable(val)
         for k, v in pairs(val) do
             tbl = {
-                default = v.value,
+                default = v.default,
                 desc = v.desc,
                 category = v.category,
             }
@@ -116,11 +116,12 @@ function roof.server.settings.remove(name)
     if not roof.server.data.settings[name] then
         roof.server.errors.severe("Setting '" .. name .. "' does not exist. This should not happen, but is not fatal.")
     return end
-
-    if name.method == "create" then
+    if roof.server.data.settings[name].method == "create" then
+        roof.server.errors.debug("Removing setting '" .. name .. "'. using 'create' method.")
         roof.server.data.settings[name] = nil
         roof.server.errors.change("Removed setting: " .. name)
     else
+        roof.server.errors.debug("Removing setting '" .. name .. "'. using 'internal' method.")
         roof.server.db.removeInternal(name)
     end
 end
