@@ -5,4 +5,4 @@ This addon was created for Crunky's TTT Server and is currently still in develop
 
 There will be a wiki with the final release of this base!
 
-![https://i.imgur.com/wt4c5vD.png]
+![](https://i.imgur.com/wt4c5vD.png)
