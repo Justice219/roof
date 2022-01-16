@@ -26,6 +26,10 @@ ROOF WILL NOW START ITS LOADING PROCESS!
 
    AddCSLuaFile("base/net/roof_cl_net.lua")
 
+   -- This being the main config needs to load before everything else
+   -- Do not modify this load order!
+   include("base/config/roof_main_config.lua")
+
    include("base/database/roof_sv_db.lua")
    include("base/debug/roof_sv_errors.lua")
    include("base/net/roof_sv_net.lua")
@@ -34,8 +38,7 @@ ROOF WILL NOW START ITS LOADING PROCESS!
    include("base/settings/roof_sv_settings.lua")
    include("base/player/roof_sv_player_auth.lua")
    include("base/debug/roof_sv_console.lua")
-
-   include("base/config/roof_main_config.lua")
+   
    include("base/config/roof_addon_config.lua")
    include("base/config/roof_setting_config.lua")
 end

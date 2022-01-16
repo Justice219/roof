@@ -2,11 +2,26 @@ adminsystem = adminsystem or {}
 adminsystem.client = adminsystem.client or {}
 adminsystem.client.menus = adminsystem.client.menus or {}
 adminsystem.client.menus.main = adminsystem.client.menus.main or {}
+adminsystem.client.data = adminsystem.client.data or {}
 
 function adminsystem.client.menus.main.open()
     local tabs = {}
     local data = {}
     local funcs = {}
+
+    surface.CreateFont("RoofConfigMenuButton", {
+        font = "Roboto",
+        size = 30,
+        weight = 500,
+        antialias = true,
+        shadow = false
+    })
+    surface.CreateFont("roofconfig_title", {
+        font = "Roboto",
+        size = 20,
+        weight = 500,
+        antialias = true
+    })
 
     local panel = vgui.Create("DPanel")
     panel:TDLib()
@@ -89,14 +104,142 @@ function adminsystem.client.menus.main.open()
         icon = "icon16/user.png",
         change = function()
             local d = {}
+            local p = nil
             players = panel:Add("DPanel")
             players:SetPos(290, 75)
             players:SetSize(660, 455)
             players:TDLib()
             players:ClearPaint()
                 :Background(Color(59, 59, 59), 6)
-                :Text("Player Management", "DermaLarge", Color(255, 255, 255), TEXT_ALIGN_LEFT, 230,-200)
+                :Text("Player Management", "DermaLarge", Color(255, 255, 255), TEXT_ALIGN_LEFT, 230,-202.5)
             table.insert(d, #d, players)
+
+            infop = players:Add("DPanel")
+            infop:SetPos(225, 50)
+            infop:SetSize(425,400)
+            infop:TDLib()
+            infop:ClearPaint()
+                :Background(Color(40,41,40), 6)
+
+            scroll = players:Add("DScrollPanel")
+            scroll:SetPos(10, 50)
+            scroll:SetSize(200,400)
+            scroll:TDLib()
+            scroll:ClearPaint()
+                :Background(Color(40,41,40), 6)
+
+            local name = infop:Add("DLabel")
+            name:SetPos(10, 10)
+            name:SetSize(400, 20)
+            name:SetText("Name: No User Selected")
+            name:SetTextColor(Color(255,255,255))
+
+            local steamid = infop:Add("DLabel")
+            steamid:SetPos(10, 30)
+            steamid:SetSize(400, 20)
+            steamid:SetText("SteamID: No User Selected")
+            steamid:SetTextColor(Color(255,255,255))
+
+            local rank = infop:Add("DLabel")
+            rank:SetPos(10, 50)
+            rank:SetSize(400, 20)
+            rank:SetText("Rank: No User Selected")
+            rank:SetTextColor(Color(255,255,255))
+
+            cr = players:Add("DButton")
+            cr:SetText("Change Rank")
+            cr:SetTextColor(Color(255,255,255))
+            cr:SetPos(240, 410)
+            cr:SetSize(150, 30)
+            cr:TDLib()
+            cr:ClearPaint()
+                :Background(Color(59, 59, 59), 5)
+                :BarHover(Color(255, 255, 255), 3)
+                :CircleClick()
+            cr.DoClick = function()
+                if p == nil then return end
+                local pop = vgui.Create("DFrame")
+                pop:SetSize(500, 200)
+                pop:Center()
+                pop:SetTitle("Change: " .. p:Nick() .. "'s Rank")
+                pop:MakePopup()
+                pop:TDLib()
+                pop:ClearPaint()
+                    :Background(Color(40,41,40), 6)
+                    :CircleHover(Color(59, 59, 59), 5, 20)
+                    :Text("Current Rank: " ..  adminsystem.client.data.clients[p:SteamID64()].group, "roofconfig_title", Color(255, 255, 255), TEXT_ALIGN_LEFT, 175,-50)
+
+                local rank = pop:Add("DComboBox")
+                rank:SetPos(175, 75)
+                rank:SetSize(150, 20)
+                rank:SetValue("Select A Rank")
+                for k,v in pairs(adminsystem.client.data.groups) do
+                    if v.name == adminsystem.client.data.clients[p:SteamID64()].group then continue end
+                    rank:AddChoice(v.name)
+                end
+
+                create1 = pop:Add("DButton")
+                create1:SetText("Finish")
+                create1:SetTextColor(Color(255,255,255))
+                create1:SetPos(175,140)
+                create1:SetSize(150, 30)
+                create1:TDLib()
+                create1:ClearPaint()
+                    :Background(Color(59, 59, 59), 5)
+                    :BarHover(Color(255, 255, 255), 3)
+                    :CircleClick()
+                create1.DoClick = function()
+                    if rank:GetValue() == "Select A Rank" then return end
+                    rank:SetText(rank:GetValue())
+
+                    net.Start("AdminSystem:Net:UpdateRank")
+                    net.WriteString(p:SteamID64())
+                    net.WriteString(rank:GetValue())
+                    net.SendToServer()
+
+                    panel:Remove()
+                    pop:Remove()
+                end
+            end
+            
+            
+            for k,v in pairs(player.GetAll()) do
+                --[[name = scroll:Add("DLabel")
+                name:SetText(" Player: " .. v:Nick())
+                name:SetTextColor(Color(255,255,255))
+                name:Dock(TOP)
+                name:DockMargin(5,0,5,0)
+                name:SetTall(25)--]]
+
+                local button = scroll:Add("DButton")
+                button:SetText("Player: " .. v:Nick())
+                button:Dock(TOP)
+                button:SetTextColor(Color(255,255,255))
+                button:DockMargin(5,5,5,5)
+                button:SetTall(25)
+                button:TDLib()
+                button:ClearPaint()
+                    :Background(Color(59, 59, 59), 5)
+                    :BarHover(Color(255, 255, 255), 3)
+                    :CircleClick()
+                button.DoClick = function()
+                    name:SetText("Name: " .. v:Nick())
+                    steamid:SetText("SteamID: " .. v:SteamID()) 
+                    if IsValid(v) then
+                        p = v
+                    end
+                    if adminsystem.client.data.clients[v:SteamID64()] then
+                        rank:SetText("Rank: " .. adminsystem.client.data.clients[v:SteamID64()].group)
+                    else
+                        rank:SetText("Rank: Not a client")
+                    end
+                    
+                    PrintTable(adminsystem.client.data)
+                end
+
+                
+            
+            end
 
             for k,v in pairs(d) do
                 table.insert(data, #data, v)

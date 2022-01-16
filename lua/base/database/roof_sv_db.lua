@@ -37,12 +37,12 @@ function roof.server.db.remove(name)
     roof.server.errors.change("Printing last SQL Error for debugging purposes, ")
 end
 
-function roof.server.db.updateSpecific(name, method, value)
-    local data = sql.Query("SELECT * FROM " .. name .. " WHERE " .. method .. " = " ..sql.SQLStr(method).. ";")
+function roof.server.db.updateSpecific(name, row, method, value, key)
+    local data = sql.Query("SELECT " .. row .. " FROM " .. name .. " WHERE " .. method .. " = " ..sql.SQLStr(key).. ";")
     if (data) then
-        sql.Query("UPDATE " .. name .. " SET " .. value .. " WHERE " .. method .. " = " ..sql.SQLStr(method).. ";")
+        sql.Query("UPDATE " .. name .. " SET " .. row .. " = " .. sql.SQLStr(value) .. " WHERE " .. method .. " = " ..sql.SQLStr(key).. ";")
     else
-        sql.Query("INSERT INTO " .. name .. " ( "..method..","..value.." ) VALUES( "..sql.SQLStr(method)..", "..sql.SQLStr(value).." );")
+        sql.Query("INSERT INTO " .. name .. " ( "..method..", "..row.." ) VALUES( "..sql.SQLStr(key)..", "..sql.SQLStr(value).." );")
     end
 end
 
@@ -59,6 +59,16 @@ end
 
 function roof.server.db.load(name, method)
     local val = sql.QueryValue("SELECT * FROM " .. name .. " WHERE " .. method .. " = " .. sql.SQLStr(method) .. ";")
+    if !val then
+        roof.server.errors.severe("Could not load data from DB table: " .. name .. " with method: " .. method)    
+        return false
+    else
+        return val
+    end
+end
+
+function roof.server.db.loadSpecific(name, row, method, key)
+    local val = sql.QueryValue("SELECT " .. row .. " FROM " .. name .. " WHERE " .. method .. " = " .. sql.SQLStr(key) .. ";")
     if !val then
         roof.server.errors.severe("Could not load data from DB table: " .. name .. " with method: " .. method)    
         return false

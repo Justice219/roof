@@ -20,7 +20,7 @@ PLEASE ACCESS DATA ONLY ON THE SERVERSIDE
 ]]--
 roof.server.db.create("adminsystem_players", {
     [1] = {
-        name = "group",
+        name = "'g'",
         type = "TEXT",
     },
     [2] = {
@@ -30,10 +30,30 @@ roof.server.db.create("adminsystem_players", {
 })
 
 function adminsystem.server.player.changeGroup(ply, group)
+    if !adminsystem.server.groups.find(group) then
+        roof.server.errors.severe("The group: "..group.." does not exist!")    
+    return end
 
+    local id = ply:SteamID64()
+    local data = roof.server.db.loadSpecific("adminsystem_players", "g", "id", id)
 
+    print(data)
+    if data then
+        roof.server.db.updateSpecific("adminsystem_players", "g", "id", group, id)
+        roof.server.errors.change(ply:Nick() .." has changed group to "..group)
+    else
+        roof.server.db.updateSpecific("adminsystem_players", "g", "id", group, id)
+        roof.server.errors.change(ply:Nick() .." has changed group to "..group)
+    end
 end
-function adminsystem.server.player.changeGroup(ply, group)
-    
 
+function adminsystem.server.player.findGroup(ply)
+    if !IsValid(ply) then return end
+
+    local id = ply:SteamID64()
+    local data = roof.server.db.loadSpecific("adminsystem_players", "g", "id", id)
+
+    if data then return data else
+       return false 
+    end
 end

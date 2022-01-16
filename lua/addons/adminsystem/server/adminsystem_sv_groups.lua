@@ -80,6 +80,18 @@ end
 
 function adminsystem.server.groups.load()
     roof.server.errors.severe("Loading groups...")
+    -- We always need a user table to store the users data
+     -- WE also always need a superadmin table to store the superadmins data
+    adminsystem.server.data.groups["Superadmin"] = {
+    name = "Superadmin",
+        permissions = {}   
+    }
+    roof.server.errors.change("The group  Superadmin has been loaded!")
+    adminsystem.server.data.groups["User"] = {
+        name = "User",
+        permissions = {}   
+    }
+    roof.server.errors.change("The group  User has been loaded!")
     local val = roof.server.db.loadAll("adminsystem_groups", "groups_tbl")
     if val then
         tbl = util.JSONToTable(val)
@@ -94,10 +106,14 @@ function adminsystem.server.groups.find(name)
     local val = roof.server.db.loadAll("adminsystem_groups", "groups_tbl")
     if val then
         tbl = util.JSONToTable(val)
-        if tbl[name] then
-            return tbl[name]
+        if !tbl[name] then
+            if !adminsystem.server.data.groups[name] then
+                return false
+            else
+                return adminsystem.server.data.groups[name]
+            end
         else
-            return "Group does not exist!"
+            return tbl[name]
         end
     end
 end
