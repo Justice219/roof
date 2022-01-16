@@ -7,12 +7,10 @@ roof.server.errors = roof.server.errors or {}
 -- INCLUDE FILES LIKE YOU WOULD NORMALLY!
 local function load()
     if SERVER then
+        include("addons/adminsystem/server/adminsystem_sv_net.lua")
+        include("addons/adminsystem/server/adminsystem_sv_chat.lua")
 
-
-        MsgC(Color(255, 0, 0), "[ROOF]", Color(255, 255, 255), " Admin System has loaded! \n")
-    end
-    if CLIENT then
-
+        roof.server.errors.change("Admin system has loaded")
     end
 end
 
