@@ -26,7 +26,7 @@ PLEASE ACCESS DATA ONLY ON THE SERVERSIDE
 
 ]]--
 
-roof.server.db.create("roof_groups", {
+roof.server.db.create("adminsystem_groups", {
     [1] = {
         name = "groups_tbl",
         type = "TEXT",
@@ -38,7 +38,7 @@ function adminsystem.server.groups.create(name)
         roof.server.errors.severe("The group  "..name.." already exists! please choose another name!")
     return end
 
-    local val = roof.server.db.loadAll("roof_groups", "groups_tbl")
+    local val = roof.server.db.loadAll("adminsystem_groups", "groups_tbl")
     if val then
         tbl = util.JSONToTable(val)
         tbl[name] = {
@@ -46,7 +46,7 @@ function adminsystem.server.groups.create(name)
             permissions = {},
         }
 
-        roof.server.db.updateAll("roof_groups", "groups_tbl", util.TableToJSON(tbl))
+        roof.server.db.updateAll("adminsystem_groups", "groups_tbl", util.TableToJSON(tbl))
         adminsystem.server.data.groups[name] = tbl[name]
         roof.server.errors.change("The group "..name.." has been created!")
     else
@@ -56,7 +56,7 @@ function adminsystem.server.groups.create(name)
             permissions = {},
         }
 
-        roof.server.db.updateAll("roof_groups", "groups_tbl", util.TableToJSON(tbl))
+        roof.server.db.updateAll("adminsystem_groups", "groups_tbl", util.TableToJSON(tbl))
         adminsystem.server.data.groups[name] = tbl[name]
         roof.server.errors.change("The group "..name.." has been created!")
     end
@@ -67,11 +67,11 @@ function adminsystem.server.groups.remove(name)
         roof.server.errors.severe("The group  "..name.." does not exist! please choose another name!")
     return end
 
-    local val = roof.server.db.loadAll("roof_groups", "groups_tbl")
+    local val = roof.server.db.loadAll("adminsystem_groups", "groups_tbl")
     if val then
         tbl = util.JSONToTable(val)
         tbl[name] = nil
-        roof.server.db.updateAll("roof_groups", "groups_tbl", util.TableToJSON(tbl))
+        roof.server.db.updateAll("adminsystem_groups", "groups_tbl", util.TableToJSON(tbl))
         adminsystem.server.data.groups[name] = nil
         roof.server.errors.change("The group  "..name.." has been removed!")
     end
@@ -80,7 +80,7 @@ end
 
 function adminsystem.server.groups.load()
     roof.server.errors.severe("Loading groups...")
-    local val = roof.server.db.loadAll("roof_groups", "groups_tbl")
+    local val = roof.server.db.loadAll("adminsystem_groups", "groups_tbl")
     if val then
         tbl = util.JSONToTable(val)
         for k,v in pairs(tbl) do
@@ -91,7 +91,7 @@ function adminsystem.server.groups.load()
 end
 
 function adminsystem.server.groups.find(name)
-    local val = roof.server.db.loadAll("roof_groups", "groups_tbl")
+    local val = roof.server.db.loadAll("adminsystem_groups", "groups_tbl")
     if val then
         tbl = util.JSONToTable(val)
         if tbl[name] then

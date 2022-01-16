@@ -3,6 +3,11 @@ roof.server = roof.server or {}
 roof.server.db = roof.server.db or {}
 roof.server.errors = roof.server.errors or {}
 
+function roof.server.db.query(query)
+    roof.server.errors.debug("Query: " .. query)
+    sql.Query(query)
+end
+
 function roof.server.db.create(name, values)
     local str = ""
     local i = 0
@@ -13,7 +18,7 @@ function roof.server.db.create(name, values)
         if i == max then 
             str = str .. v.name .. " " .. v.type
         else
-            str = str .. v.name .. " " .. v.type .. " , "
+            str = str .. v.name .. " " .. v.type .. ", "
         end
     end
 
@@ -21,6 +26,7 @@ function roof.server.db.create(name, values)
     roof.server.errors.change("Created new DB table: " .. name)
     if !sql.LastError() then return end
     roof.server.errors.change("Printing last SQL Error for debugging purposes, ")
+    print(sql.LastError())
 end
 
 function roof.server.db.remove(name)

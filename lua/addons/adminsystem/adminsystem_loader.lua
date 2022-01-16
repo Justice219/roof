@@ -9,8 +9,8 @@ local function load()
     if SERVER then
         include("addons/adminsystem/server/adminsystem_sv_net.lua")
         include("addons/adminsystem/server/adminsystem_sv_chat.lua")
-        include("addons/adminsystem/server/adminsystem_sv_player.lua")
         include("addons/adminsystem/server/adminsystem_sv_groups.lua")
+        include("addons/adminsystem/server/adminsystem_sv_player.lua")
         include("addons/adminsystem/server/adminsystem_sv_console.lua")
 
         roof.server.errors.change("Admin system has loaded")
