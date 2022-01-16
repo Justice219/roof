@@ -1,8 +1,22 @@
-- WELCOME TO ROOF! -
+```
+                      _____ 
+_______  ____   _____/ ____\
+\_  __ \/  _ \ /  _ \   __\ 
+ |  | \(  <_> |  <_> )  |   
+ |__|   \____/ \____/|__|   
 
-Roof is an open source TTT base for creating custom content seamlessly!
-This addon was created for Crunky's TTT Server and is currently still in development!
+-     Version 1.1    -
+- Created By Justice -
 
-- Ingame Config Panel
+]]
+msg2 = [[
+- Roof is a TTT base for creating custom content seamlessly, and designed to be
+better than MOAT and other open source TTT bases out there currently!
+
+- This Version of the base is not compatible with MOAT! -
+- This Version of the base is also not finished, and is very buggy! Be Careful! -
+```
+
+INGAME CONFIG PANEL
 ![](https://i.imgur.com/wt4c5vD.png)
 
