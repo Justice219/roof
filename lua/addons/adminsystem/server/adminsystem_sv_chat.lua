@@ -40,6 +40,18 @@ hook.Add("PlayerSay", "AdminSystemChat", function(ply, text)
         net.Start("AdminSystem:Net:ClientSync")
         net.WriteTable(adminsystem.server.data.groups)
         net.WriteTable(plys)
+        net.WriteTable(adminsystem.server.data.permissions)
+        local temp = {}
+        for k,v in pairs(adminsystem.server.data.modules) do
+            temp[k] = {
+                name = v.name,
+                nick = v.nick,
+                description = v.description,
+                usage = v.usage,
+                args = v.args,
+            }
+        end
+        net.WriteTable(temp)
         net.Send(ply)
 
         net.Start("AdminSystem:Net:Menus:Main")

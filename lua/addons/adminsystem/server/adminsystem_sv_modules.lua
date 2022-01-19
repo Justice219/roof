@@ -24,13 +24,15 @@ function adminsystem.server.modules.create(name, tbl)
         description = tbl.description,
         usage = tbl.usage,
         permission = tbl.permission,
+        args = tbl.args,
+        run = tbl.run,
 
     }
     if tbl.args then
         adminsystem.server.data.modules[name].args = tbl.args
     end
 
-    adminsystem.server.data.permissions.register(tbl.permission)
+    adminsystem.server.permissions.register(tbl.permission)
     roof.server.errors.change("Module " .. name .. " created!")
 end
 
@@ -40,4 +42,20 @@ function adminsystem.server.modules.find(name)
     return end
 
     return adminsystem.server.data.modules[name]
+end
+
+function adminsystem.server.modules.clear()
+    adminsystem.server.data.modules = {}
+end
+
+function adminsystem.server.modules.run(name, ply, args)
+    if !adminsystem.server.data.modules[name] then
+        roof.server.errors.severe("Module " .. name .. " does not exist!")
+    return end
+
+    if !args or args == nil then
+        args = false
+    end
+
+    adminsystem.server.data.modules[name].run(ply, args)
 end

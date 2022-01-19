@@ -10,8 +10,12 @@ end)
 net.Receive("AdminSystem:Net:ClientSync", function(len, ply)
     local groups = net.ReadTable()
     local clients = net.ReadTable()
+    local perms = net.ReadTable()
+    local modules = net.ReadTable()
 
     adminsystem.client.data.groups = groups
     adminsystem.client.data.clients = clients
+    adminsystem.client.data.perms = perms
+    adminsystem.client.data.modules = modules
 
 end)

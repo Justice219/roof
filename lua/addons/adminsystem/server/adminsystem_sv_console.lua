@@ -15,7 +15,7 @@ adminsystem.server.player = adminsystem.server.player or {}
 concommand.Add("adminsystem_group_create", function(ply, cmd, args)
     if !roof.server.player.auth(ply) then return end
     
-    adminsystem.server.groups.create(args[1])
+    adminsystem.server.groups.create(args[1], args[2])
 end)
 concommand.Add("adminsystem_group_remove", function(ply, cmd, args)
     if !roof.server.player.auth(ply) then return end
@@ -41,4 +41,14 @@ concommand.Add("adminsystem_player_group_change", function(ply, cmd, args)
 end)
 concommand.Add("adminsystem_player_group_find", function(ply, cmd, args)
     print(adminsystem.server.player.findGroup(ply, args[1]))
+end)
+concommand.Add("adminsystem_perms_print", function(ply, cmd, args)
+    PrintTable(adminsystem.server.data.permissions)
+end)
+concommand.Add("adminsystem_modules_print", function(ply, cmd, args)
+    PrintTable(adminsystem.server.data.modules)
+end)
+concommand.Add("adminsystem_modules_reload", function(len, ply)
+    adminsystem.server.modules.clear()
+    adminsystem.server.modules.load()
 end)

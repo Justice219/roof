@@ -17,18 +17,45 @@ function adminsystem.server.modules.load()
         description = "Kick a player",
         usage = "/kick <player> <reason>",
         permission = "adminsystem.kick",
+        args = {
+            [1] = {
+                name = "reason",
+                description = "The reason for the kick",
+                type = "string",
+                optional = true
+            }
+        },
+        run = function(ply, a)
+            if !a then
+                ply:Kick("No reason given")
+            else
+                ply:Kick(a[1])
+            end
+        end,
     })
     adminsystem.server.modules.create("ban", {
         name = "Ban",
         description = "Bans a player",
         usage = "/ban <player> <reason>",
         permission = "adminsystem.ban",
+        args = {
+
+        },
+        run = function(ply, a)
+
+        end,
     })
     adminsystem.server.modules.create("kill", {
         name = "Kill",
         description = "Kills a player",
         usage = "/kill <player>",
         permission = "adminsystem.kill",
+        args = {
+
+        },
+        run = function(ply, a)
+
+        end,
     })
 
 

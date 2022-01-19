@@ -33,7 +33,7 @@ roof.server.db.create("adminsystem_groups", {
     },
 })
 
-function adminsystem.server.groups.create(name)
+function adminsystem.server.groups.create(name, priority)
     if adminsystem.server.data.groups[name] then
         roof.server.errors.severe("The group  "..name.." already exists! please choose another name!")
     return end
@@ -44,6 +44,7 @@ function adminsystem.server.groups.create(name)
         tbl[name] = {
             name = name,
             permissions = {},
+            priority = priority,
         }
 
         roof.server.db.updateAll("adminsystem_groups", "groups_tbl", util.TableToJSON(tbl))
@@ -54,11 +55,40 @@ function adminsystem.server.groups.create(name)
         tbl[name] = {
             name = name,
             permissions = {},
+            priority = priority,
         }
 
         roof.server.db.updateAll("adminsystem_groups", "groups_tbl", util.TableToJSON(tbl))
         adminsystem.server.data.groups[name] = tbl[name]
         roof.server.errors.change("The group "..name.." has been created!")
+    end
+end
+
+function adminsystem.server.groups.edit(name, newname, priority)
+    if !adminsystem.server.data.groups[name] then
+        roof.server.errors.severe("The group "..name.." does not exist!")
+    return end
+
+    local val = roof.server.db.loadAll("adminsystem_groups", "groups_tbl")
+    if val then
+        tbl = util.JSONToTable(val)
+        temp = tbl[name]
+
+        -- lets clear the table
+        tbl[name] = nil
+        tbl[newname] = {
+            name = newname,
+            permissions = temp.permissions,
+            priority = priority,
+        }
+        
+        adminsystem.server.data.groups[name] = nil
+        adminsystem.server.data.groups[newname] = tbl[newname]
+
+        roof.server.db.updateAll("adminsystem_groups", "groups_tbl", util.TableToJSON(tbl))
+        roof.server.errors.change("The group "..name.." has been edited!")
+    else
+        roof.server.errors.severe("The group "..name.." does not exist!")
     end
 end
 
@@ -84,12 +114,14 @@ function adminsystem.server.groups.load()
      -- WE also always need a superadmin table to store the superadmins data
     adminsystem.server.data.groups["Superadmin"] = {
     name = "Superadmin",
-        permissions = {}   
+        permissions = {},
+        priority = 0,  
     }
     roof.server.errors.change("The group  Superadmin has been loaded!")
     adminsystem.server.data.groups["User"] = {
         name = "User",
-        permissions = {}   
+        permissions = {},
+        priority = 1,   
     }
     roof.server.errors.change("The group  User has been loaded!")
     local val = roof.server.db.loadAll("adminsystem_groups", "groups_tbl")
@@ -97,6 +129,11 @@ function adminsystem.server.groups.load()
         tbl = util.JSONToTable(val)
         for k,v in pairs(tbl) do
             adminsystem.server.data.groups[v.name] = v
+            for k,v in pairs(v.permissions) do
+                if !adminsystem.server.data.permissions[k] then
+                    adminsystem.server.data.groups[v.name].permissions[k] = nil
+                end
+            end
             roof.server.errors.change("The group  "..v.name.." has been loaded!")
         end
     end

@@ -13,8 +13,9 @@ adminsystem.server.data.groups = adminsystem.server.data.groups or {}
 adminsystem.server.data.modules = adminsystem.server.data.modules or {}
 adminsystem.server.modules = adminsystem.server.modules or {}
 adminsystem.server.data.permissions = adminsystem.server.data.permissions or {}
+adminsystem.server.permissions = adminsystem.server.permissions or {}
 
-function adminsystem.server.data.permissions.register(permission)
+function adminsystem.server.permissions.register(permission)
     if adminsystem.server.data.permissions[permission] then return false end
     adminsystem.server.data.permissions[permission] = true
 
