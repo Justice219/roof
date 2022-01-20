@@ -23,7 +23,7 @@ hook.Add("PlayerSay", "AdminSystemChat", function(ply, text)
             if not g then
                 plys[v:SteamID64()] = {
                     name = v:Nick(),
-                    group = "user",
+                    group = "User",
                     id = v:SteamID64(),
                 }
             continue end
@@ -47,6 +47,7 @@ hook.Add("PlayerSay", "AdminSystemChat", function(ply, text)
                 name = v.name,
                 nick = v.nick,
                 description = v.description,
+                permission = v.permission,
                 usage = v.usage,
                 args = v.args,
             }

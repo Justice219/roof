@@ -577,6 +577,7 @@ function adminsystem.client.menus.main.open()
             local d = {}
             local m = nil
             local p = nil
+            local argd = {}
             modules = panel:Add("DPanel")
             modules:SetPos(290, 75)
             modules:SetSize(660, 455)
@@ -631,6 +632,59 @@ function adminsystem.client.menus.main.open()
                 :Background(Color(40,41,40), 6)
                 :Text("Description: ", "DermaLarge", Color(255, 255, 255), TEXT_ALIGN_LEFT, 0, -200)
 
+            args = infop:Add("DButton")
+            args:SetPos(5, 350)
+            args:SetSize(300, 20)
+            args:SetText("Modify Arguments")
+            args:SetTextColor(Color(255,255,255))
+            args:TDLib()
+            args:ClearPaint()
+                :Background(Color(59, 59, 59), 5)
+                :BarHover(Color(255, 255, 255), 3)
+                :CircleClick()
+            args.DoClick = function()
+                local pop = vgui.Create("DFrame")
+                pop:SetSize(300, 200)
+                pop:SetTitle("Modify Arguments")
+                pop:Center()
+                pop:MakePopup()
+                pop:TDLib()
+                pop:ClearPaint()
+                    :Background(Color(40,41,40), 6)
+                    :Text("Modify Arguments", "DermaLarge", Color(255, 255, 255), TEXT_ALIGN_LEFT, 0, -200)
+                
+                local scroll = pop:Add("DScrollPanel")
+                scroll:SetPos(5, 50)
+                scroll:SetSize(290, 150)
+                scroll:TDLib()
+                scroll:ClearPaint()
+                    :Background(Color(14,204,14), 6)
+
+                for k,v in pairs(m.args) do
+                    if v.type == "string" then
+                        entry = scroll:Add("DTextEntry")
+                        entry:Dock(TOP)
+                        entry:DockMargin(5,5,5,5)
+                        entry:SetTall(25)
+                        if argd[k] then
+                            entry:SetText(argd[k])
+                        else
+                            entry:SetText(v.description)
+                        end
+                        entry:SetTextColor(Color(255,255,255))
+                        entry:SetFont("roofconfig_title")
+                        entry.Paint = function(self, w, h)
+                            draw.RoundedBox( 6, 0, 0, w, h, Color(40,41,40) )
+                            self:DrawTextEntryText(Color(255, 255, 255), Color(255, 0, 0), Color(255, 255, 255))
+                        end
+                        entry.OnValueChange = function(text)
+                            argd[k] = entry:GetValue()
+                        end
+                    end
+                end
+
+            end
+                
             run = infop:Add("DButton")
             run:SetPos(5, 375)
             run:SetSize(300, 20)
@@ -645,11 +699,18 @@ function adminsystem.client.menus.main.open()
                 if !m then return end
                 if !p then return end
 
-                net.Start("AdminSystem:Net:RunModule")
                 local tbl = {
                     name = m.name,
+                    perm = m.permission,
                     ply = p,
+                    args = argd
                 }
+                for k,v in pairs(m.args) do
+                    if v.optional == true and !argd[k] then
+                        Print("Argument "..k.." is not optional and not set.")    
+                    return end
+                end
+                net.Start("AdminSystem:Net:RunModule")
                 net.WriteTable(tbl)
                 net.SendToServer()
             end
@@ -688,6 +749,8 @@ function adminsystem.client.menus.main.open()
                     name:SetText("Module Name: " .. v.nick)
                     desc:SetText("Description: " .. v.description)
                     m = v
+                    PrintTable(m)
+
                 end
             end
 

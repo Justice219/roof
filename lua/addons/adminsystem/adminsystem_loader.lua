@@ -10,11 +10,12 @@ local function load()
         include("addons/adminsystem/server/adminsystem_sv_net.lua")
         include("addons/adminsystem/server/adminsystem_sv_chat.lua")
         include("addons/adminsystem/server/adminsystem_sv_permissions.lua")
-        include("addons/adminsystem/server/adminsystem_sv_groups.lua")
         include("addons/adminsystem/server/adminsystem_sv_player.lua")
         include("addons/adminsystem/server/adminsystem_sv_modules.lua")
         include("addons/adminsystem/server/adminsystem_sv_config.lua")
+        include("addons/adminsystem/server/adminsystem_sv_groups.lua")
         include("addons/adminsystem/server/adminsystem_sv_console.lua")
+        include("addons/adminsystem/server/adminsystem_sv_auth.lua")
 
         roof.server.errors.change("Admin system has loaded")
     end

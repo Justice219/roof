@@ -81,7 +81,7 @@ function adminsystem.server.groups.edit(name, newname, priority)
             permissions = temp.permissions,
             priority = priority,
         }
-        
+
         adminsystem.server.data.groups[name] = nil
         adminsystem.server.data.groups[newname] = tbl[newname]
 
@@ -95,6 +95,13 @@ end
 function adminsystem.server.groups.remove(name)
     if not adminsystem.server.data.groups[name] then
         roof.server.errors.severe("The group  "..name.." does not exist! please choose another name!")
+    return end
+    if name == "Superadmin" then
+        print(name)
+        roof.server.errors.severe("You cannot remove the group "..name.."!")
+    return end
+    if name == "User" then
+        roof.server.errors.severe("You cannot remove the group "..name.."!")
     return end
 
     local val = roof.server.db.loadAll("adminsystem_groups", "groups_tbl")
@@ -112,30 +119,48 @@ function adminsystem.server.groups.load()
     roof.server.errors.severe("Loading groups...")
     -- We always need a user table to store the users data
      -- WE also always need a superadmin table to store the superadmins data
-    adminsystem.server.data.groups["Superadmin"] = {
-    name = "Superadmin",
-        permissions = {},
-        priority = 0,  
-    }
-    roof.server.errors.change("The group  Superadmin has been loaded!")
-    adminsystem.server.data.groups["User"] = {
-        name = "User",
-        permissions = {},
-        priority = 1,   
-    }
+    adminsystem.server.permissions.register("adminsystem.groups.create")
+    adminsystem.server.permissions.register("adminsystem.groups.edit")
+    adminsystem.server.permissions.register("adminsystem.groups.remove")
+    adminsystem.server.permissions.register("adminsystem.groups.perms")
+    adminsystem.server.permissions.register("adminsystem.player.group.update")
+
     roof.server.errors.change("The group  User has been loaded!")
     local val = roof.server.db.loadAll("adminsystem_groups", "groups_tbl")
     if val then
         tbl = util.JSONToTable(val)
         for k,v in pairs(tbl) do
+            local n = v.name
             adminsystem.server.data.groups[v.name] = v
             for k,v in pairs(v.permissions) do
                 if !adminsystem.server.data.permissions[k] then
-                    adminsystem.server.data.groups[v.name].permissions[k] = nil
+                    roof.server.errors.change("Group "..n.." has a permission that does not exist! "..k.." has been removed!")
+                    adminsystem.server.data.groups[n].permissions[k] = nil
                 end
+            end
+            if adminsystem.server.data.groups[v.name].priority == nil then
+                adminsystem.server.data.groups[v.name].priority = 0
             end
             roof.server.errors.change("The group  "..v.name.." has been loaded!")
         end
+    end
+
+    if !adminsystem.server.data.groups["Superadmin"] then
+
+        adminsystem.server.data.groups["Superadmin"] = {
+            name = "Superadmin",
+                permissions = {},
+                priority = 0,  
+            }
+        roof.server.errors.change("The group  Superadmin has been loaded!")
+    end
+    if !adminsystem.server.data.groups["User"] then
+
+        adminsystem.server.data.groups["User"] = {
+            name = "User",
+            permissions = {},
+            priority = 1,   
+        }
     end
 end
 
@@ -159,6 +184,22 @@ function adminsystem.server.groups.addPerm(name, perm)
     if not adminsystem.server.data.groups[name] then
         roof.server.errors.severe("The group  "..name.." does not exist! please choose another name!")
     return end
+    if name == "Superadmin" or "User" then
+        local val = roof.server.db.loadAll("adminsystem_groups", "groups_tbl")
+        if !val then return end
+        tbl = util.JSONToTable(val)
+        tbl[name] = {
+            name = name,
+            permissions = adminsystem.server.data.groups[name].permissions,
+            priority = adminsystem.server.data.groups[name].priority,
+        }
+        tbl[name].permissions[perm] = true
+        roof.server.db.updateAll("adminsystem_groups", "groups_tbl", util.TableToJSON(tbl))
+        adminsystem.server.data.groups[name] = tbl[name]
+        roof.server.errors.change("The group  "..name.." has been edited!")
+
+        roof.server.errors.severe("This group was created by the system, it has been overridden!")
+    return end
 
     local val = roof.server.db.loadAll("adminsystem_groups", "groups_tbl")
     if val then
@@ -167,6 +208,34 @@ function adminsystem.server.groups.addPerm(name, perm)
         roof.server.db.updateAll("adminsystem_groups", "groups_tbl", util.TableToJSON(tbl))
         adminsystem.server.data.groups[name] = tbl[name]
         roof.server.errors.change("The permission "..perm.." has been added to the group "..name.."!")
+    end
+end
+function adminsystem.server.groups.removePerm(name, perm)
+    if not adminsystem.server.data.groups[name] then
+        roof.server.errors.severe("The group  "..name.." does not exist! please choose another name!")
+    return end
+    if name == "Superadmin" or "User" then
+        local val = roof.server.db.loadAll("adminsystem_groups", "groups_tbl")
+        if !val then return end
+        tbl = util.JSONToTable(val)
+        tbl[name] = {
+            name = name,
+            permissions = adminsystem.server.data.groups[name].permissions,
+            priority = adminsystem.server.data.groups[name].priority,
+        }
+        tbl[name].permissions[perm] = nil
+        roof.server.db.updateAll("adminsystem_groups", "groups_tbl", util.TableToJSON(tbl))
+        adminsystem.server.data.groups[name] = tbl[name]
+        roof.server.errors.change("The permission "..perm.." has been removed from the group "..name.."!")
+    return end
+
+    local val = roof.server.db.loadAll("adminsystem_groups", "groups_tbl")
+    if val then
+        tbl = util.JSONToTable(val)
+        tbl[name].permissions[perm] = nil
+        roof.server.db.updateAll("adminsystem_groups", "groups_tbl", util.TableToJSON(tbl))
+        adminsystem.server.data.groups[name] = tbl[name]
+        roof.server.errors.change("The permission "..perm.." has been removed from the group "..name.."!")
     end
 end
 

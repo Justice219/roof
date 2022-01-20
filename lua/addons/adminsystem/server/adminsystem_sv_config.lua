@@ -20,16 +20,18 @@ function adminsystem.server.modules.load()
         args = {
             [1] = {
                 name = "reason",
-                description = "The reason for the kick",
+                description = "The reason for the kick",                
                 type = "string",
-                optional = true
+                optional = false
             }
         },
         run = function(ply, a)
             if !a then
-                ply:Kick("No reason given")
+                ply:JLIBSendNotification("You need to specify a player to kick.")
+                --ply:Kick("No reason given")
             else
-                ply:Kick(a[1])
+                ply:JLIBSendNotification("You have kicked " .. a[1] .. ".")
+                --ply:Kick(a[1])
             end
         end,
     })
@@ -46,15 +48,13 @@ function adminsystem.server.modules.load()
         end,
     })
     adminsystem.server.modules.create("kill", {
-        name = "Kill",
+        name = "Slay",
         description = "Kills a player",
-        usage = "/kill <player>",
-        permission = "adminsystem.kill",
-        args = {
-
-        },
+        usage = "/Slay <player>",
+        permission = "adminsystem.slay",
         run = function(ply, a)
-
+            if !IsValid(ply) then return end
+            ply:Kill()
         end,
     })
 
