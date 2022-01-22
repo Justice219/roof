@@ -22,7 +22,7 @@ local function load()
         include("addons/adminsystem/server/adminsystem_sv_auth.lua")
 
         adminsystem.enabled = true
-        roof.server.errors.change("Admin system has loaded")
+        roof.server.errors.normal("Admin system has loaded")
     end
 end
 

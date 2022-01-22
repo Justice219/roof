@@ -9,6 +9,8 @@ local function load()
         include("addons/chatfilter/server/chatfilter_sv_chat.lua")
         include("addons/chatfilter/server/chatfilter_sv_config.lua")
         include("addons/chatfilter/server/chatfilter_sv_net.lua")
+
+        roof.server.errors.normal("Chat Filter Has Loaded!")
     end
 end
 
