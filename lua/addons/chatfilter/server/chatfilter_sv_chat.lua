@@ -6,7 +6,7 @@ chatfilter.server.blacklist = chatfilter.server.blacklist or {}
 
 hook.Add("PlayerSay", "ChatFilterCommands", function(ply, txt)
     if txt == "!filter" then
-        roof.server.errors.debug("Admin system has been enabled for " .. ply:Nick())
+        roof.server.errors.debug("Chat Filter has been enabled for " .. ply:Nick())
         roof.server.net.loadClientFiles(ply, {
             [1] = "addons/chatfilter/client/chatfilter_ui_net.lua",
             [2] = "addons/chatfilter/client/chatfilter_ui_main.lua",

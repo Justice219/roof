@@ -250,3 +250,5 @@ function adminsystem.server.groups.clear()
     if !adminsystem.enabled then return end
     adminsystem.server.data.groups = {}
 end
+
+adminsystem.server.groups.load()

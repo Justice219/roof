@@ -157,6 +157,7 @@ function adminsystem.client.menus.main.open()
                 :BarHover(Color(255, 255, 255), 3)
                 :CircleClick()
             cr.DoClick = function()
+                if !p:SteamID64() then return end
                 if p == nil then return end
                 local pop = vgui.Create("DFrame")
                 pop:SetSize(500, 200)
