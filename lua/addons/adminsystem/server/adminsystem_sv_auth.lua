@@ -8,6 +8,7 @@ adminsystem.server.net = adminsystem.server.net or {}
 adminsystem.server.chat = adminsystem.server.chat or {}
 adminsystem.server.data = adminsystem.server.data or {}
 adminsystem.server.auth = adminsystem.server.auth or {}
+adminsystem.server.groups = adminsystem.server.groups or {}
 
 function adminsystem.server.auth.checkPriv(ply, perm)
     if !adminsystem.enabled then return end

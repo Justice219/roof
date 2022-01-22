@@ -21,6 +21,7 @@ hook.Add("PlayerSay", "ChatFilter", function(ply, txt)
     local str = string.Explode(" ", txt)
     for k,v in pairs(str) do
         if chatfilter.server.blacklist.exists(v) then
+            PrintMessage(HUD_PRINTTALK, ply:Nick() .. ": " .. "You can't say that dude!")
             return ""
         end
     end

@@ -6,6 +6,7 @@ roof.server.errors = roof.server.errors or {}
 adminsystem = adminsystem or {}
 adminsystem.server = adminsystem.server or {}
 adminsystem.server.settings = adminsystem.server.settings or {}
+adminsystem.server.groups = adminsystem.server.groups or {}
 
 -- THIS CODE DEALS WITH STARTING THE ADDON, JUST
 -- INCLUDE FILES LIKE YOU WOULD NORMALLY!
@@ -20,6 +21,8 @@ local function load()
         include("addons/adminsystem/server/adminsystem_sv_groups.lua")
         include("addons/adminsystem/server/adminsystem_sv_console.lua")
         include("addons/adminsystem/server/adminsystem_sv_auth.lua")
+
+        adminsystem.server.groups.load()
 
         adminsystem.enabled = true
         roof.server.errors.normal("Admin system has loaded")

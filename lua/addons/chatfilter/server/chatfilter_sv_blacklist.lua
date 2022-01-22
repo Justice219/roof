@@ -59,6 +59,16 @@ function chatfilter.server.blacklist.remove(word)
     end
 end
 
+function chatfilter.server.blacklist.load()
+    local val = roof.server.db.loadAll("chatfilter_blacklist", "blacklist_tbl")
+    if val then
+        local tbl = util.JSONToTable(val)
+        for k, v in pairs(tbl) do
+            chatfilter.server.data.blacklist[k] = true
+        end
+    end
+end
+
 function chatfilter.server.blacklist.exists(word)
     for k,v in pairs(chatfilter.server.data.blacklist) do
         if k == word then
@@ -66,3 +76,5 @@ function chatfilter.server.blacklist.exists(word)
         end
     end
 end
+
+chatfilter.server.blacklist.load()

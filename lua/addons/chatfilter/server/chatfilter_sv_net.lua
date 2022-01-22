@@ -2,6 +2,12 @@ chatfilter = chatfilter or {}
 chatfilter.server = chatfilter.server or {}
 chatfilter.server.blacklist = chatfilter.server.blacklist or {}
 
+adminsystem = adminsystem or {}
+adminsystem.server = adminsystem.server or {}
+adminsystem.server.permissions = adminsystem.server.permissions or {}
+adminsystem.server.groups = adminsystem.servergroups or {}
+adminsystem.server.auth = adminsystem.server.auth or {}
+
 util.AddNetworkString("ChatFilter:Net:OpenMenu")
 util.AddNetworkString("ChatFilter:Net:Blacklist:Add")
 util.AddNetworkString("ChatFilter:Net:Blacklist:Remove")
