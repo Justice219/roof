@@ -17,6 +17,7 @@ util.AddNetworkString("AdminSystem:Net:EditPerms")
 util.AddNetworkString("AdminSystem:Net:RunModule")
 
 net.Receive("AdminSystem:Net:UpdateRank", function(len, ply)
+     if !adminsystem.enabled then return end
      if !adminsystem.server.auth.checkPriv(ply, "adminsystem.player.group.update") then return end
 
      local ply = nil 
@@ -40,6 +41,7 @@ net.Receive("AdminSystem:Net:UpdateRank", function(len, ply)
      adminsystem.server.player.changeGroup(ply, rank)
 end)
 net.Receive("AdminSystem:Net:RemoveRank", function(len, ply)
+     if !adminsystem.enabled then return end
      local g = net.ReadString()
      if !adminsystem.server.auth.checkPriv(ply, "adminsystem.groups.remove") then return end
      if !adminsystem.server.auth.checkPriority(ply, g) then return end
@@ -47,6 +49,7 @@ net.Receive("AdminSystem:Net:RemoveRank", function(len, ply)
      adminsystem.server.groups.remove(g)
 end)
 net.Receive("AdminSystem:Net:CreateGroup", function(len, ply)
+     if !adminsystem.enabled then return end
      if !adminsystem.server.auth.checkPriv(ply, "adminsystem.groups.create") then return end
 
      local name = net.ReadString()
@@ -55,6 +58,7 @@ net.Receive("AdminSystem:Net:CreateGroup", function(len, ply)
      adminsystem.server.groups.create(name, num)
 end)
 net.Receive("AdminSystem:Net:EditGroup", function(len, ply)
+     if !adminsystem.enabled then return end
      local name = net.ReadString()
 
      if !adminsystem.server.auth.checkPriv(ply, "adminsystem.groups.edit") then return end
@@ -66,6 +70,7 @@ net.Receive("AdminSystem:Net:EditGroup", function(len, ply)
      adminsystem.server.groups.edit(name, new, pri)
 end)
 net.Receive("AdminSystem:Net:EditPerms", function(len, ply)
+     if !adminsystem.enabled then return end
      local name = net.ReadString()
 
      if !adminsystem.server.auth.checkPriv(ply, "adminsystem.groups.perms") then return end
@@ -83,6 +88,7 @@ net.Receive("AdminSystem:Net:EditPerms", function(len, ply)
      end
 end)
 net.Receive("AdminSystem:Net:RunModule", function(len, ply)
+     if !adminsystem.enabled then return end
      local tbl = net.ReadTable()
      if !adminsystem.server.auth.checkPriv(ply, tbl.perm) then
           print("failed check")     

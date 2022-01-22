@@ -10,6 +10,7 @@ adminsystem.server.data = adminsystem.server.data or {}
 adminsystem.server.auth = adminsystem.server.auth or {}
 
 function adminsystem.server.auth.checkPriv(ply, perm)
+    if !adminsystem.enabled then return end
     local plys = {}
     for k,v in pairs(player.GetAll()) do
         local g = adminsystem.server.player.findGroup(v)
@@ -47,6 +48,7 @@ function adminsystem.server.auth.checkPriv(ply, perm)
     end
 end
 function adminsystem.server.auth.checkPriority(ply, group2)
+    if !adminsystem.enabled then return end
     local g = adminsystem.server.player.findGroup(ply)
     local g2 = adminsystem.server.groups.find(group2)
     if not g then return false end

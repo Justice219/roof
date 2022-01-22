@@ -5,7 +5,7 @@ roof.server.data = roof.server.data or {}
 roof.server.data.addons = roof.server.data.addons or {}
 
 hook.Add("PlayerSay", "RoofConfigCommands", function(ply, txt)
-    if txt == "!roof_config" then
+    if txt == "!config" then
         ply.RoofConfigClient = ply.RoofConfigClient or false 
         if !ply.RoofConfigClient then
             roof.server.net.loadClientFiles(ply, {

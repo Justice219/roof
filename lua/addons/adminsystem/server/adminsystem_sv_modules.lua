@@ -14,6 +14,7 @@ adminsystem.server.data.modules = adminsystem.server.data.modules or {}
 adminsystem.server.modules = adminsystem.server.modules or {}
 
 function adminsystem.server.modules.create(name, tbl)
+    if !adminsystem.enabled then return end
     if adminsystem.server.data.modules[name] then
         roof.server.errors.severe("Module " .. name .. " already exists!")
     return end
@@ -37,6 +38,7 @@ function adminsystem.server.modules.create(name, tbl)
 end
 
 function adminsystem.server.modules.find(name)
+    if !adminsystem.enabled then return end
     if !adminsystem.server.data.modules[name] then
         roof.server.errors.severe("Module " .. name .. " does not exist!")
     return end
@@ -45,10 +47,12 @@ function adminsystem.server.modules.find(name)
 end
 
 function adminsystem.server.modules.clear()
+    if !adminsystem.enabled then return end
     adminsystem.server.data.modules = {}
 end
 
 function adminsystem.server.modules.run(name, ply, args)
+    if !adminsystem.enabled then return end
     if !adminsystem.server.data.modules[name] then
         roof.server.errors.severe("Module " .. name .. " does not exist!")
     return end

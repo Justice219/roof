@@ -8,6 +8,12 @@ MsgC(Color(255,0,0),"[ROOF]", Color(255,255,255)," Server Addon Process Starting
 function roof.server.addons.load()
 
     -- PLEASE ADD ANY NEW ADDONS TO THE LIST BELOW
+    roof.server.addons.create("addons/roofconfig/roofconfig_loader.lua",{
+        name = "Roof Config",
+        author = "Justice",
+        description = "Allows for ingame configuration of the server!",
+        version = "1.0",
+    })
     roof.server.addons.create("addons/chatcommands/chatcommands_loader.lua",{
         name = "Chat Commands",
         author = "Justice",
@@ -24,12 +30,6 @@ function roof.server.addons.load()
         name = "Admin System",
         author = "Justice",
         description = "A admin system for the server!",
-        version = "1.0",
-    })
-    roof.server.addons.create("addons/roofconfig/roofconfig_loader.lua",{
-        name = "Roof Config",
-        author = "Justice",
-        description = "Allows for ingame configuration of the server!",
         version = "1.0",
     })
 end

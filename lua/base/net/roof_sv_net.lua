@@ -11,6 +11,7 @@ function roof.server.net.loadClientFiles(ply, tbl)
         AddCSLuaFile(v)
     end
 
+
     if ply then
         net.Start("Roof:Net:LoadClientFiles")
         net.WriteTable(tbl)

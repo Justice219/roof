@@ -666,8 +666,8 @@ function adminsystem.client.menus.main.open()
                         entry:Dock(TOP)
                         entry:DockMargin(5,5,5,5)
                         entry:SetTall(25)
-                        if argd[k] then
-                            entry:SetText(argd[k])
+                        if argd[v.name] then
+                            entry:SetText(argd[v.name])
                         else
                             entry:SetText(v.description)
                         end
@@ -678,7 +678,7 @@ function adminsystem.client.menus.main.open()
                             self:DrawTextEntryText(Color(255, 255, 255), Color(255, 0, 0), Color(255, 255, 255))
                         end
                         entry.OnValueChange = function(text)
-                            argd[k] = entry:GetValue()
+                            argd[v.name] = entry:GetValue()
                         end
                     end
                 end
@@ -705,14 +705,19 @@ function adminsystem.client.menus.main.open()
                     ply = p,
                     args = argd
                 }
+                local fail = false
                 for k,v in pairs(m.args) do
-                    if v.optional == true and !argd[k] then
-                        Print("Argument "..k.." is not optional and not set.")    
+                    if !tbl.args[v.name] and v.optional == false then      
+                        chat.AddText(Color(255,0,0), "[Roof Admin] ", Color(255,255,255), v.name .. " is a required argument for " .. m.name .. "!")
+                        fail = true
                     return end
                 end
-                net.Start("AdminSystem:Net:RunModule")
-                net.WriteTable(tbl)
-                net.SendToServer()
+
+                if !fail then
+                    net.Start("AdminSystem:Net:RunModule")
+                    net.WriteTable(tbl)
+                    net.SendToServer()                
+                end
             end
             
 
@@ -749,7 +754,6 @@ function adminsystem.client.menus.main.open()
                     name:SetText("Module Name: " .. v.nick)
                     desc:SetText("Description: " .. v.description)
                     m = v
-                    PrintTable(m)
 
                 end
             end
@@ -757,7 +761,6 @@ function adminsystem.client.menus.main.open()
             for k,v in pairs(d) do
                 table.insert(data, #data, v)
             end
-            PrintTable(data)
         end
     })
 end

@@ -11,6 +11,28 @@ adminsystem.server.data = adminsystem.server.data or {}
 adminsystem.server.groups = adminsystem.server.groups or {}
 adminsystem.server.data.groups = adminsystem.server.data.groups or {}
 
+--[[
+    .___                              __                 __   
+    |   | _____ ______   ____________/  |______    _____/  |_ 
+    |   |/     \\____ \ /  _ \_  __ \   __\__  \  /    \   __\
+    |   |  Y Y  \  |_> >  <_> )  | \/|  |  / __ \|   |  \  |  
+    |___|__|_|  /   __/ \____/|__|   |__| (____  /___|  /__|  
+              \/|__|                           \/     \/      
+
+    This file contains config variables for the adminsystem
+    This includes both settings and modules, etc.
+
+    Do not edit anything here unless you know what you are doing!
+    Thank You!
+
+]]--
+
+roof.server.settings.create("adminsystem_debug", {
+    default = true,
+    desc = "Enable/Disable debugging for the Admin System",
+    category = "debug" -- main, player, debug, world
+})
+
 function adminsystem.server.modules.load()
     adminsystem.server.modules.create("kick", {
         name = "Kick",
@@ -22,16 +44,16 @@ function adminsystem.server.modules.load()
                 name = "reason",
                 description = "The reason for the kick",                
                 type = "string",
-                optional = false
+                optional = true
             }
         },
         run = function(ply, a)
-            if !a then
-                ply:JLIBSendNotification("You need to specify a player to kick.")
-                --ply:Kick("No reason given")
+            if !a["reason"] then
+                ply:JLIBSendNotification("Admin System", "You have kicked ".. ply:Nick() .." for no reason")
+                ply:Kick("No reason given")
             else
-                ply:JLIBSendNotification("You have kicked " .. a[1] .. ".")
-                --ply:Kick(a[1])
+                ply:JLIBSendNotification("Admin System", "You have kicked " .. ply:Nick() .. " for " .. a["reason"])
+                ply:Kick(a["reason"])
             end
         end,
     })

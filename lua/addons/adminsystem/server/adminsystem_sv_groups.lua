@@ -34,6 +34,7 @@ roof.server.db.create("adminsystem_groups", {
 })
 
 function adminsystem.server.groups.create(name, priority)
+    if !adminsystem.enabled then return end
     if adminsystem.server.data.groups[name] then
         roof.server.errors.severe("The group  "..name.." already exists! please choose another name!")
     return end
@@ -65,6 +66,7 @@ function adminsystem.server.groups.create(name, priority)
 end
 
 function adminsystem.server.groups.edit(name, newname, priority)
+    if !adminsystem.enabled then return end
     if !adminsystem.server.data.groups[name] then
         roof.server.errors.severe("The group "..name.." does not exist!")
     return end
@@ -93,6 +95,7 @@ function adminsystem.server.groups.edit(name, newname, priority)
 end
 
 function adminsystem.server.groups.remove(name)
+    if !adminsystem.enabled then return end
     if not adminsystem.server.data.groups[name] then
         roof.server.errors.severe("The group  "..name.." does not exist! please choose another name!")
     return end
@@ -116,6 +119,7 @@ function adminsystem.server.groups.remove(name)
 end
 
 function adminsystem.server.groups.load()
+    if !adminsystem.enabled then return end
     roof.server.errors.severe("Loading groups...")
     -- We always need a user table to store the users data
      -- WE also always need a superadmin table to store the superadmins data
@@ -165,6 +169,7 @@ function adminsystem.server.groups.load()
 end
 
 function adminsystem.server.groups.find(name)
+    if !adminsystem.enabled then return end
     local val = roof.server.db.loadAll("adminsystem_groups", "groups_tbl")
     if val then
         tbl = util.JSONToTable(val)
@@ -181,6 +186,7 @@ function adminsystem.server.groups.find(name)
 end
 
 function adminsystem.server.groups.addPerm(name, perm)
+    if !adminsystem.enabled then return end
     if not adminsystem.server.data.groups[name] then
         roof.server.errors.severe("The group  "..name.." does not exist! please choose another name!")
     return end
@@ -211,6 +217,7 @@ function adminsystem.server.groups.addPerm(name, perm)
     end
 end
 function adminsystem.server.groups.removePerm(name, perm)
+    if !adminsystem.enabled then return end
     if not adminsystem.server.data.groups[name] then
         roof.server.errors.severe("The group  "..name.." does not exist! please choose another name!")
     return end
@@ -240,6 +247,7 @@ function adminsystem.server.groups.removePerm(name, perm)
 end
 
 function adminsystem.server.groups.clear()
+    if !adminsystem.enabled then return end
     adminsystem.server.data.groups = {}
 end
 
