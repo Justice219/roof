@@ -2,6 +2,11 @@ roof = roof or {}
 roof.server = roof.server or {}
 roof.server.errors = roof.server.errors or {}
 
+adminsystem = adminsystem or {}
+adminsystem.server = adminsystem.server or {}
+adminsystem.server.permissions = adminsystem.server.permissions or {}
+adminsystem.server.groups = adminsystem.servergroups or {}
+
 chatfilter = chatfilter or {}
 chatfilter.server = chatfilter.server or {}
 chatfilter.server.blacklist = chatfilter.server.blacklist or {}
@@ -9,6 +14,8 @@ chatfilter.server.blacklist = chatfilter.server.blacklist or {}
 chatfilter.server.data = chatfilter.server.data or {}
 chatfilter.server.data.blacklist = chatfilter.server.data.blacklist or {}
 
+adminsystem.server.permissions.register("chatfilter.add")
+adminsystem.server.permissions.register("chatfilter.remove")
 roof.server.db.create("chatfilter_blacklist", {
     [1] = {
         name = "blacklist_tbl",

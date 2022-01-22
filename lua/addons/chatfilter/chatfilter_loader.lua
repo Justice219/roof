@@ -6,8 +6,8 @@ roof.server.addons = roof.server.addons or {}
 -- INCLUDE FILES LIKE YOU WOULD NORMALLY!
 local function load()
     if SERVER then
+        include("addons/chatfilter/server/chatfilter_sv_blacklist.lua")
         include("addons/chatfilter/server/chatfilter_sv_chat.lua")
-        include("addons/chatfilter/server/chatfilter_sv_config.lua")
         include("addons/chatfilter/server/chatfilter_sv_net.lua")
 
         roof.server.errors.normal("Chat Filter Has Loaded!")

@@ -14,8 +14,8 @@ hook.Add("PlayerSay", "AdminSystemChat", function(ply, text)
         if !roof.server.player.auth(ply) then return end
         roof.server.errors.debug("Admin system has been enabled for " .. ply:Nick())
         roof.server.net.loadClientFiles(ply, {
-            [1] = "addons/adminsystem/client/adminsystem_ui_menu.lua",
-            [2] = "addons/adminsystem/client/adminsystem_cl_net.lua",
+            [1] = "addons/adminsystem/client/adminsystem_cl_net.lua",
+            [2] = "addons/adminsystem/client/adminsystem_ui_menu.lua",
         })
 
         timer.Simple(1, function()

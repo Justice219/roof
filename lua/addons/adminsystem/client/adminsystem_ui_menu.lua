@@ -763,4 +763,5 @@ function adminsystem.client.menus.main.open()
             end
         end
     })
+    ChangeTab("Players")
 end

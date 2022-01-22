@@ -1269,4 +1269,5 @@ function roofconfig.client.menus.main.open()
             PrintTable(data)
         end
     })
+    ChangeTab("Main")
 end
